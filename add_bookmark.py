@@ -1,5 +1,4 @@
 from PyPDF2 import PdfFileReader as pdfreader, PdfFileWriter as pdfwriter
-from process import process
 
 
 class BookMarkMaker:
@@ -16,7 +15,7 @@ class BookMarkMaker:
         self.offset = int(offset) if offset is not None else 0
     def process_bookmark(self):
         with open(self.bookmark_path) as f:
-            cnt_list = [process(str=i.replace("\n", "")) for i in f.readlines() if i.strip() != ""]
+            cnt_list = [process(i.rstrip() for i in f.readlines() if i.strip() != ""]
         print("here:", cnt_list)
         self.marks = []
         self.pages = []
@@ -25,7 +24,7 @@ class BookMarkMaker:
             self.marks.append(' '.join(line.split(None, -1)[:-1]))
             self.pages.append(line.split(None, -1)[-1])
         for i in self.marks:
-            self.levels.append(i.count(".") + 1)
+            self.levels.append(i.count(".") + 1)  # or '\t'
         self.info = [(title, page, level) for title, page, level in zip(self.marks, self.pages, self.levels)]
         self.add_bookmarks(self.info)
 
